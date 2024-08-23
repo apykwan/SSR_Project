@@ -1,8 +1,11 @@
 import React from 'react';
+import { useLoaderData } from 'react-router-dom';
 
-import Home from './components/Home';
-import UsersList from './components/UsersList';
-import NotFound from './components/NotFound';
+import Home from './pages/Home';
+import UsersList from './pages/UsersList';
+import NotFound from './pages/NotFound';
+import { fetchUsers } from './reducers/usersReducer';
+import createStore from '../helpers/createStore';
 
 const routes = [
   {
@@ -13,8 +16,18 @@ const routes = [
   },
   {
     path: '/users',
+    loader: async () => {
+      const store = createStore();
+
+      // Dispatch the action directly to the store
+      await store.dispatch(fetchUsers());
+
+      // Return the relevant state data
+      return store.getState().users;
+    },
     Component() {
-      return <UsersList />;
+      const data = useLoaderData();
+      return <UsersList userData={data} />;
     },
   },
   {

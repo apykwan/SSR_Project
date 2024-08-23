@@ -5,12 +5,15 @@ import { Provider } from 'react-redux';
 
 import Routes from '../client/Routes';
 import createFetchRequest from './request';
+import createStore from './createStore';
 
 let handler = createStaticHandler(Routes);
 
-export default async (req, res, store) => {
-  let fetchRequest = createFetchRequest(req, res);
-  let context = await handler.query(fetchRequest);
+export default async (req, res) => {
+  const store = createStore();
+
+  const fetchRequest = createFetchRequest(req, res);
+  const context = await handler.query(fetchRequest);
   if (
     context instanceof Response &&
     [301, 302, 303, 307, 308].includes(context.status)
@@ -21,7 +24,7 @@ export default async (req, res, store) => {
     );
   }
 
-  let router = createStaticRouter(
+  const router = createStaticRouter(
     handler.dataRoutes,
     context
   );

@@ -6,15 +6,12 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
 
 import Routes from './Routes';
-import rootReducer from './reducers';
+import createStore from '../helpers/createStore';
 
-let router = createBrowserRouter(Routes);
-const store = configureStore({
-  reducer: rootReducer,
-});
+const router = createBrowserRouter(Routes);
+const store = createStore();
 
 const rootElement = document.getElementById('root');
 
