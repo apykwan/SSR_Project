@@ -2,8 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const res = await axios.get(`${process.env.USER_API}/users`);
-  console.log('API response', res.data);
+  const res = await axios.get(`https://react-ssr-api.herokuapp.com/users`);
   return res.data;
 });
 

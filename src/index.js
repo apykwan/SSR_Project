@@ -8,10 +8,11 @@ dotenv.config();
 const app = express();
 app.use(express.static('public'));
 
-app.get('*', (req, res) => {
+app.get('*', async (req, res) => {
   // Some logic to initialize and load data into the store
 
-  res.send(renderer(req, store));
+  const result = await renderer(req, res, store);
+  res.send(result);
 });
 
 app.listen(5000, () => console.log("server is running"));

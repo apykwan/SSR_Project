@@ -1,23 +1,44 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { StaticRouter } from "react-router-dom/server";
+import { createStaticHandler, createStaticRouter, StaticRouterProvider } from "react-router-dom/server";
 import { Provider } from 'react-redux';
 
 import Routes from '../client/Routes';
+import createFetchRequest from './request';
 
-export default (req, store) => {
-  console.log('store', store);
+let handler = createStaticHandler(Routes);
+
+export default async (req, res, store) => {
+  let fetchRequest = createFetchRequest(req, res);
+  let context = await handler.query(fetchRequest);
+  if (
+    context instanceof Response &&
+    [301, 302, 303, 307, 308].includes(context.status)
+  ) {
+    return res.redirect(
+      context.status,
+      context.headers.get("Location")
+    );
+  }
+
+  let router = createStaticRouter(
+    handler.dataRoutes,
+    context
+  );
+
   const content = renderToString(
     <Provider store={store}>
-      <StaticRouter location={req.url}>
-        <Routes />
-      </StaticRouter>
+      <StaticRouterProvider
+        router={router}
+        context={context}
+      />
     </Provider>
   );
 
   return `
     <html>
       <head>
+        <base href="/">
         <title>SSR</title>
       </head>
       <body>
