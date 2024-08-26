@@ -6,14 +6,29 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { Provider } from 'react-redux';
-
+import axios from 'axios';
 import Routes from './Routes';
-import createStore from '../helpers/createStore';
+
+import { configureStore } from '@reduxjs/toolkit';
 
 const router = createBrowserRouter(Routes);
-const store = createStore();
+import rootReducer from './reducers';
 
 const rootElement = document.getElementById('root');
+
+const axiosInstance = axios.create({
+  baseURL: '/api'
+});
+
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: axiosInstance,
+      },
+    }),
+});
 
 hydrateRoot(
   rootElement,

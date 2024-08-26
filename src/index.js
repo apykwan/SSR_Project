@@ -1,11 +1,20 @@
 import express from 'express';
 import dotenv from 'dotenv';
-// import { matchRoutes } from 'react-router-dom';
+import proxy from 'express-http-proxy';
+
 
 import renderer from './helpers/renderer';
 
+
 dotenv.config();
 const app = express();
+
+app.use('/api', proxy('http://react-ssr-api.herokuapp.com', {
+  proxyReqOptDecorator(opts) {
+    opts.headers['x-forwarded-host'] = 'localhost:5000';
+    return opts;
+  }
+}));
 app.use(express.static('public'));
 
 app.get('*', async (req, res) => {

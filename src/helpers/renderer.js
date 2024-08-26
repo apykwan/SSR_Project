@@ -7,13 +7,14 @@ import Routes from '../client/Routes';
 import createFetchRequest from './request';
 import createStore from './createStore';
 
-let handler = createStaticHandler(Routes);
+const handler = createStaticHandler(Routes);
 
 export default async (req, res) => {
-  const store = createStore();
-
+  if (!req) return;
+  const store = createStore(req);
   const fetchRequest = createFetchRequest(req, res);
   const context = await handler.query(fetchRequest);
+
   if (
     context instanceof Response &&
     [301, 302, 303, 307, 308].includes(context.status)

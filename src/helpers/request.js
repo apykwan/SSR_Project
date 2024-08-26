@@ -32,3 +32,14 @@ export default function createFetchRequest(req, res) {
 
   return new Request(url.href, init);
 }
+
+export function parseCookies(cookieHeader) {
+  const cookies = {};
+  if (cookieHeader) {
+    cookieHeader.split(';').forEach(cookie => {
+      const [name, ...rest] = cookie.split('=');
+      cookies[name.trim()] = rest.join('=').trim();
+    });
+  }
+  return cookies;
+}

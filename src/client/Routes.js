@@ -1,9 +1,9 @@
 import React from 'react';
 import { useLoaderData } from 'react-router-dom';
 
-import Home from './pages/Home';
-import UsersList from './pages/UsersList';
-import NotFound from './pages/NotFound';
+import HomePage from './pages/HomePage';
+import UsersListPage from './pages/UsersListPage';
+import NotFoundPage from './pages/NotFoundPage';
 import { fetchUsers } from './reducers/usersReducer';
 import createStore from '../helpers/createStore';
 
@@ -11,7 +11,7 @@ const routes = [
   {
     path: '/',
     Component() {
-      return <Home />;
+      return <HomePage />;
     },
   },
   {
@@ -27,13 +27,13 @@ const routes = [
     },
     Component() {
       const data = useLoaderData();
-      return <UsersList userData={data} />;
+      return <UsersListPage userData={data} />;
     },
   },
   {
     path: '*',
     Component() {
-      return <NotFound />;
+      return <NotFoundPage />;
     },
   } 
 ];

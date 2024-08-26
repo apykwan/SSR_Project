@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 
-export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const res = await axios.get(`https://react-ssr-api.herokuapp.com/users`);
+export const fetchUsers = createAsyncThunk('users/fetchUsers', async (_, { extra: axiosInstance }) => {
+  const res = await axiosInstance.get(`/users`);
   return res.data;
 });
 
