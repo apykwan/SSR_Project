@@ -1,20 +1,13 @@
 // Startup point for th eclinet side application
 import React from 'react';
 import { hydrateRoot } from 'react-dom/client';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { configureStore } from '@reduxjs/toolkit';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from 'react-redux';
 import axios from 'axios';
 import Routes from './Routes';
 
-import { configureStore } from '@reduxjs/toolkit';
-
-const router = createBrowserRouter(Routes);
 import rootReducer from './reducers';
-
-const rootElement = document.getElementById('root');
 
 const axiosInstance = axios.create({
   baseURL: '/api'
@@ -30,6 +23,9 @@ const store = configureStore({
     }),
 });
 
+const router = createBrowserRouter(Routes);
+
+const rootElement = document.getElementById('root');
 hydrateRoot(
   rootElement,
   <Provider store={store}>

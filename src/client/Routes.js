@@ -1,41 +1,56 @@
 import React from 'react';
 import { useLoaderData } from 'react-router-dom';
 
+import App from './App';
 import HomePage from './pages/HomePage';
 import UsersListPage from './pages/UsersListPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { fetchUsers } from './reducers/usersReducer';
+import { fetchCurrentUser } from './reducers/authReducer';
 import createStore from '../helpers/createStore';
 
-const routes = [
+export default [
   {
     path: '/',
-    Component() {
-      return <HomePage />;
-    },
-  },
-  {
-    path: '/users',
     loader: async () => {
       const store = createStore();
-
-      // Dispatch the action directly to the store
-      await store.dispatch(fetchUsers());
-
-      // Return the relevant state data
-      return store.getState().users;
+      await store.dispatch(fetchCurrentUser());
+      return store.getState().auth.currentUser;
     },
-    Component() {
-      const data = useLoaderData();
-      return <UsersListPage userData={data} />;
-    },
+    element: <LoadCurrentUser />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+      {
+        path: '/users',
+        loader: async () => {
+          const store = createStore();
+
+          // Dispatch the action directly to the store
+          await store.dispatch(fetchUsers());
+
+          // Return the relevant state data
+          return store.getState().users;
+        },
+        element: <UsersListPageWithData />,
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />,
+      },
+    ],
   },
-  {
-    path: '*',
-    Component() {
-      return <NotFoundPage />;
-    },
-  } 
 ];
 
-export default routes;
+function LoadCurrentUser() {
+  const data = useLoaderData();
+  return <App currentUser={data} />;
+}
+
+function UsersListPageWithData() {
+  const data = useLoaderData();
+  return <UsersListPage userData={data} />;
+}
+
