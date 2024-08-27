@@ -5,8 +5,9 @@ import { configureStore } from '@reduxjs/toolkit';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from 'react-redux';
 import axios from 'axios';
-import Routes from './Routes';
+import { HelmetProvider } from 'react-helmet-async';
 
+import Routes from './Routes';
 import rootReducer from './reducers';
 
 const axiosInstance = axios.create({
@@ -29,6 +30,8 @@ const rootElement = document.getElementById('root');
 hydrateRoot(
   rootElement,
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <HelmetProvider>
+      <RouterProvider router={router} />
+    </HelmetProvider>
   </Provider>
 );

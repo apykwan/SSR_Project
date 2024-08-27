@@ -2,8 +2,8 @@ import React from 'react';
 
 function NotFound () {
   return (
-    <div>
-      <h1>Not Found Page!!!!!!</h1>
+    <div className="center">
+      <h1>Route not found</h1>
     </div>
   );
 }

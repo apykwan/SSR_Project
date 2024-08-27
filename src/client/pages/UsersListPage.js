@@ -1,3 +1,5 @@
+import { Helmet } from 'react-helmet-async';
+
 function UsersList ({ userData: { users, status } }) {
   if (status === 'loading') return <div>Loading...</div>;
   if (status === 'failed') return <div>Error: {error}</div>;
@@ -9,8 +11,19 @@ function UsersList ({ userData: { users, status } }) {
     ));
   }
 
+  function head() {
+    return (
+      <Helmet>
+        <title>{`${users.length > 0 ? users.length : 0} Users Loaded`}</title>
+        <meta property="og:title" content="User's names" />
+      </Helmet>
+    );
+  } 
+
   return (
-    <div>Here is a big list of Users
+    <div>
+      {head()}
+      Here is a big list of Users
       <ul>{renderUsers()}</ul>
     </div>
   );
