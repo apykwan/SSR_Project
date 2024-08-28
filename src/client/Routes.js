@@ -4,16 +4,19 @@ import { useLoaderData } from 'react-router-dom';
 import App from './App';
 import HomePage from './pages/HomePage';
 import UsersListPage from './pages/UsersListPage';
+import AdminsListPage from './pages/AdminsListPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { fetchUsers } from './reducers/usersReducer';
 import { fetchCurrentUser } from './reducers/authReducer';
+import { fetchAdmins } from './reducers/adminsReducer';
 import createStore from '../helpers/createStore';
+import RequireAuth from './components/hocs/RequireAuth';
 
+const store = createStore();
 export default [
   {
     path: '/',
     loader: async () => {
-      const store = createStore();
       await store.dispatch(fetchCurrentUser());
       return store.getState().auth.currentUser;
     },
@@ -26,8 +29,6 @@ export default [
       {
         path: '/users',
         loader: async () => {
-          const store = createStore();
-
           // Dispatch the action directly to the store
           await store.dispatch(fetchUsers());
 
@@ -35,6 +36,18 @@ export default [
           return store.getState().users;
         },
         element: <UsersListPageWithData />,
+      },
+      {
+        path: '/admins',
+        loader: async () => {
+          await store.dispatch(fetchAdmins());
+          return store.getState().admins;
+        },
+        element: (
+          <RequireAuth>
+            <AdminsListPageWithData />
+          </RequireAuth>
+        ),
       },
       {
         path: '*',
@@ -54,3 +67,7 @@ function UsersListPageWithData() {
   return <UsersListPage userData={data} />;
 }
 
+function AdminsListPageWithData() {
+  const data = useLoaderData();
+  return <AdminsListPage adminData={data} />;
+}

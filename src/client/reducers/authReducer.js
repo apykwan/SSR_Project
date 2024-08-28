@@ -9,7 +9,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     currentUser: null,
-    status: 'idle',
+    status: 'idle',                 // idle | fulfilled | loading | reject
     error: '', 
   },
   reducers: {},

@@ -19,8 +19,7 @@ function Headers ({ auth }) {
             <Link to="/admins">Admins</Link>
           </li>
           <li>{authButton}</li>
-        </ul>
-        
+        </ul> 
       </div>
     </nav>
   );
